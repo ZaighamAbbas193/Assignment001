@@ -42,7 +42,7 @@ public class BaseTest {
 
         return driver;
     }
-
+    
     // Method to tear down the WebDriver instance (close the browser)
     public void tearDown() {
         if (driver != null) {

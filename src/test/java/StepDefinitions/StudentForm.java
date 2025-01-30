@@ -2,6 +2,7 @@ package StepDefinitions;
 
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.junit.AfterClass;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,8 +12,14 @@ import com.config.BaseTest;
 import com.pages.StudentFormLocators;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
+import utils.AllureReport;
+import utils.PropertiesReader;
 import io.cucumber.java.en.Then;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+
+import utils.AllureReport;
 
 import java.time.Duration;
 
@@ -22,19 +29,19 @@ public class StudentForm extends BaseTest{
     private WebDriverWait wait;
 
     @Given("the user opens the student form page")
-    public void the_user_opens_the_student_form_page() {
+    public void the_user_opens_the_student_form_page() throws InterruptedException {
         
     	// Setup WebDriver
     			WebDriver driver = setup();
 
     			// Initialize PageFactory to load elements annotated with @FindBy
     			studentFormLocators = PageFactory.initElements(driver, StudentFormLocators.class);
-
+    			
+    			PropertiesReader reader = new PropertiesReader("src\\test\\java\\resources\\config.properties");
+    			
     			// Open the desired URL
-    			driver.get("https://demoqa.com/automation-practice-form");
-
-    			// Maximize the browser window
-    		//	driver.manage().window().maximize();
+    			driver.get(reader.getProperty("url"));
+    			Thread.sleep(1000);
     }
 
     @When("the user submits the form without filling the mandatory fields")
@@ -83,12 +90,16 @@ public class StudentForm extends BaseTest{
         } else {
             System.out.println("Gender field does not have a red border (FAIL)");
         }
+        AllureReport.attachScreenshot(driver);
+        
+       
     }
 
     @When("the user enters an invalid mobile number")
     public void the_user_enters_an_invalid_mobile_number() throws InterruptedException {
         studentFormLocators.mobileNumberField.clear();
         studentFormLocators.mobileNumberField.sendKeys("12345");
+        AllureReport.attachScreenshot(driver);
         JavascriptExecutor js = (JavascriptExecutor) BaseTest.driver;
         js.executeScript("window.scrollBy(0, 1000)");
         studentFormLocators.submitForm();
@@ -104,12 +115,14 @@ public class StudentForm extends BaseTest{
 			System.out.println(
 					"Mobile Number field validation (FAIL): Field should not accepts more than or less than 10 digits.");
 		}
+		
     }
 
     @When("the user enters an invalid email without a domain")
     public void the_user_enters_an_invalid_email_without_a_domain() throws InterruptedException {
         studentFormLocators.emailField.clear();
         studentFormLocators.emailField.sendKeys("abc.com");
+        AllureReport.attachScreenshot(driver);
         JavascriptExecutor js = (JavascriptExecutor) BaseTest.driver;
         js.executeScript("window.scrollBy(0, 1000)");
         studentFormLocators.submitForm();
@@ -137,20 +150,25 @@ public class StudentForm extends BaseTest{
     			} else {
     				System.out.println("Email field does not have a red border (FAIL)");
     			}
+    			 
     }
 
     @When("the user fills in the valid information in the form")
-    public void the_user_fills_in_the_valid_information_in_the_form() {
-        studentFormLocators.enterFirstName("John");
-        studentFormLocators.enterLastName("Doe");
-        studentFormLocators.enterEmail("johndoe@example.com");
+    public void the_user_fills_in_the_valid_information_in_the_form() throws InterruptedException {
+    	       	
+    	Thread.sleep(4000);
+    	PropertiesReader reader = new PropertiesReader("src\\test\\java\\resources\\config.properties");
+    	
+        studentFormLocators.enterFirstName( reader.getProperty("enterFirstName"));
+        studentFormLocators.enterLastName(reader.getProperty("enterLastName"));
+        studentFormLocators.enterEmail(reader.getProperty("enterEmail"));
         studentFormLocators.selectGenderMale();
-        studentFormLocators.enterMobileNumber("1234567890");
-        studentFormLocators.enterDateOfBirth("31 Jan 2026");
+        studentFormLocators.enterMobileNumber(reader.getProperty("enterMobileNumber"));
+        studentFormLocators.enterDateOfBirth(reader.getProperty("enterDateOfBirth"));
         studentFormLocators.enterSubjects("Maths");
         studentFormLocators.selectHobbySports();
         studentFormLocators.uploadPicture("C:\\Users\\IT\\Desktop\\ABC.png");
-        studentFormLocators.enterAddress("123 Main Street, City, Country");
+        studentFormLocators.enterAddress("12th Main Street, Karachi, Pakistan");
 
         JavascriptExecutor js = (JavascriptExecutor) BaseTest.driver;
         js.executeScript("window.scrollBy(0, 1000)");
@@ -168,6 +186,10 @@ public class StudentForm extends BaseTest{
              System.out.println("Form submitted successfully!");
          } else {
              System.out.println("Form submission failed!");
+             AllureReport.attachScreenshot(driver);
          }
+       
     }
+   
+    
 }

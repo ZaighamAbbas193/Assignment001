@@ -3,16 +3,12 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="QAAutmation.RegressionSuit">
+      <class name="QAAutmation.MandatoryFieldsTest">
         <methods>
-          <include name="openStudentFormWebsite"/>
           <include name="validateMandatoryFields"/>
-          <include name="validateEmailField"/>
-          <include name="validateMobileNumberField"/>
-          <include name="submitFormAndVerify"/>
-          <include name="fillOutForm"/>
+          <include name="openStudentFormWebsite"/>
         </methods>
-      </class> <!-- QAAutmation.RegressionSuit -->
+      </class> <!-- QAAutmation.MandatoryFieldsTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

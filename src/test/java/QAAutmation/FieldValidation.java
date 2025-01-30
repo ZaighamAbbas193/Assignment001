@@ -11,6 +11,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -115,19 +116,10 @@ public class FieldValidation extends BaseTest {
 
 	}
 
-	/*
-	 * public static void main(String[] args) throws InterruptedException {
-	 * FieldValidation test = new FieldValidation();
-	 * 
-	 * // Open the form website
-	 * 
-	 * test.openStudentFormWebsite();
-	 * 
-	 * // Validate Mobile Number and Email fields
-	 * 
-	 * test.validateMobileNumberField(); test.validateEmailField();
-	 * 
-	 * }
-	 */
+	@AfterTest
+	public void tearDown() {
+
+		driver.quit();
+	}
 
 }
